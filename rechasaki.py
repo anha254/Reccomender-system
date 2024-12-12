@@ -4,6 +4,17 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from surprise import Reader, Dataset, KNNBasic, dump
 
+# Tải tệp knn_model.pkl.gz từ GitHub (hoặc bạn có thể tải nó từ một URL nếu cần)
+url = "https://github.com/anha254/Reccomender-system/raw/master/knn_model.pkl.gz"
+r = requests.get(url)
+with open("knn_model.pkl.gz", "wb") as f:
+    f.write(r.content)
+
+# Giải nén tệp knn_model.pkl.gz
+with gzip.open("knn_model.pkl.gz", "rb") as f_in:
+    with open("knn_model.pkl", "wb") as f_out:
+        shutil.copyfileobj(f_in, f_out)
+
 # Đọc dữ liệu
 df_product = pd.read_csv("San_pham.csv")
 df_review = pd.read_csv("Danh_gia.csv")
