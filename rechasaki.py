@@ -4,6 +4,11 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from surprise import Reader, Dataset, KNNBasic, dump
 
+import requests
+import gzip
+import shutil
+
+
 # Tải tệp knn_model.pkl.gz từ GitHub (hoặc bạn có thể tải nó từ một URL nếu cần)
 url = "https://github.com/anha254/Reccomender-system/raw/master/knn_model.pkl.gz"
 r = requests.get(url)
