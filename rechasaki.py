@@ -4,8 +4,6 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from surprise import Reader, Dataset, KNNBasic, dump
 
-
-
 # Đọc dữ liệu
 df_product = pd.read_csv("San_pham.csv")
 df_review = pd.read_csv("Danh_gia.csv")
@@ -97,7 +95,24 @@ with tab2:
             st.success(f"Xin chào {customer_info['ho_ten'].values[0]}!")
             st.write("Thông tin của bạn:")
             st.write(customer_info)
-            
+
+            # Hiển thị lịch sử mua hàng và đánh giá
+            st.write("Lịch sử sản phẩm bạn đã mua và đánh giá:")
+            purchase_history = df_review[df_review['ma_khach_hang'] == int(customer_code)]
+            if not purchase_history.empty:
+                purchase_history = purchase_history.merge(df_product, on='ma_san_pham', how='left')
+                purchase_history = purchase_history.rename(columns={
+                    'ma_san_pham': 'Mã Sản Phẩm',
+                    'ten_san_pham': 'Tên Sản Phẩm',
+                    'so_sao': 'Số Sao',
+                    'noi_dung_binh_luan': 'Nội Dung Bình Luận',
+                    'ngay_binh_luan': 'Ngày Bình Luận',
+                    'gia_ban': 'Giá Bán'
+                })
+                st.dataframe(purchase_history[['Ngày Bình Luận', 'Mã Sản Phẩm', 'Tên Sản Phẩm', 'Giá Bán', 'Số Sao', 'Nội Dung Bình Luận']])
+            else:
+                st.write("Bạn chưa đánh giá sản phẩm nào.")
+
             # Đề xuất sản phẩm từ Collaborative Filtering
             st.write("Sản phẩm đề xuất (Dựa trên khách hàng tương tự):")
             recommended_products_collab = recommend_products(int(customer_code))
@@ -107,6 +122,7 @@ with tab2:
                 st.write("Không có sản phẩm phù hợp.")
         else:
             st.warning("Mã khách hàng không hợp lệ! Vui lòng kiểm tra lại.")
+
 
 # Tab 3: Sản phẩm và Đề xuất
 with tab3:
