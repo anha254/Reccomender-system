@@ -1,0 +1,27 @@
+name: Unzip and Store Model
+
+on:
+  push:
+    paths:
+      - '**/*.gz'
+
+jobs:
+  unzip_model:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Unzip knn_model.pkl.gz
+        run: |
+          mkdir -p models
+          gunzip -c knn_model.pkl.gz > models/knn_model.pkl
+
+      - name: Commit and push the unzipped model
+        run: |
+          git config --global user.name "anha254"
+          git config --global user.email "anha.4w@gmail.com"
+          git add models/knn_model.pkl
+          git commit -m "Unzipped knn model"
+          git push
