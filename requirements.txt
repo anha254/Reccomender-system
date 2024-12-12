@@ -8,3 +8,6 @@ scikit-surprise
 gensim
 surprise
 wordcloud
+requests==2.28.1
+gzip==1.8
+shutil==1.0.0
